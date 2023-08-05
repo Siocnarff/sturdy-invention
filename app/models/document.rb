@@ -40,14 +40,19 @@ class Document < ApplicationRecord
     end
 
     def ask_book query
-        pages = find_relevant_pages(query)
-        p = "#{@shem}\n Context: #{pages.join('\n')}\n Query: #{query}"
-        response = @openai.completions(
-            parameters: {
-                model: COMPLETIONS_MODEL,
-                prompt: p,
-                max_tokens: 200,
-            })
-        response['choices'].first['text'].strip
+        begin
+            pages = find_relevant_pages(query)
+            p = "#{@shem}\n Context: #{pages.join('\n')}\n Query: #{query}"
+            response = begin  @openai.completions(
+                parameters: {
+                    model: COMPLETIONS_MODEL,
+                    prompt: p,
+                    max_tokens: 200,
+                })
+            end
+            response['choices'].first['text'].strip
+        rescue
+            "Sorry, I am struggeling to answer that. Try again, and perhaps word it a bit differently?"
+        end
     end
 end
