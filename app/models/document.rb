@@ -50,9 +50,9 @@ class Document < ApplicationRecord
                     max_tokens: 200,
                 })
             end
-            response['choices'].first['text'].strip
+            {:answer => response['choices'].first['text'].strip}.to_json
         rescue
-            "Sorry, I am struggeling to answer that. Try again, and perhaps word it a bit differently?"
+            {:answer => "Sorry, I am struggeling to answer that. Try again, and perhaps word it a bit differently?"}.to_json
         end
     end
 end
