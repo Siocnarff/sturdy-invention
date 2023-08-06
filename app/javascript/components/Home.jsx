@@ -61,7 +61,7 @@ export default function Book() {
 
           <div>
             <textarea 
-              rows = "5" 
+              rows = "3" 
               cols = "35" 
               value={text}
               onChange={handleChange}
