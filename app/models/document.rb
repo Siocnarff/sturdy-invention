@@ -83,4 +83,8 @@ end
 
         {:question => get_answer_from_openai(query)}
     end
+
+    def get_random_past_question
+        {:question => Question.order("RANDOM()").first.q}
+    end
 end

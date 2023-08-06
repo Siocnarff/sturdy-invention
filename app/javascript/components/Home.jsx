@@ -33,6 +33,20 @@ export default function Book() {
       setText(data.question);
     });
   }
+  
+  function getRandomPastQuestion() {
+    fetch("/api/v1/document/get_random_past_question")
+      .then((response) => {
+        if (!response.ok) {
+          return "What can Ninjas teach us about Cyber Security?";
+        }
+        return response.json();
+     })
+     .then((data) => {
+      setText(data.question);
+    });
+  }
+
 
   function handleChange(event) {
     setText(event.target.value);
@@ -67,6 +81,7 @@ export default function Book() {
     color: black,
     border: "none",
     padding: "10px 20px",
+    marginRight: "10px",
     borderRadius: "4px",
     cursor: "pointer",
     marginTop: "10px",
@@ -80,6 +95,7 @@ export default function Book() {
           <p>
             Ask this book a question. It will respond. Kind of. A bit like a magic book, but more boring, because we think we know how it works. But remember, it is just a book.
             So ask it about the kind of things you would judge it to know -- based on its cover.
+            The book is also capable of some introspecton, so you can ask it what you should ask it.          
           </p>
           <img style={img} src="/cybercover.png"></img>
 
@@ -90,7 +106,7 @@ export default function Book() {
           <div>
             <textarea 
               rows = "3" 
-              cols = "35" 
+              cols = "46" 
               value={text}
               onChange={handleChange}
               style={textarea}
@@ -98,11 +114,15 @@ export default function Book() {
           </div>
 
           <div>
-          <button onClick={submit} style={button}>Ask</button>
+          <button onClick={submit} style={{...button, float: 'left'}}>Ask</button>
           </div>
 
           <div>
-          <button onClick={getGoodQuestion} style={{...button, backgroundColor: '#FAAA8D'}}>Ask Book For Question</button>
+          <button onClick={getGoodQuestion} style={{...button, backgroundColor: '#6E7E85', float: 'left'}}>Ask Book For Question</button>
+          </div>
+
+          <div>
+          <button onClick={getRandomPastQuestion} style={{...button, backgroundColor: '#6E7E85', float: 'left'}}>?</button>
           </div>
 
         </div>
