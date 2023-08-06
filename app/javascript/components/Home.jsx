@@ -34,6 +34,16 @@ export default function Book() {
     maxWidth: "300px"
   }
 
+  const textarea = {
+    backgroundColor: "#201E1F",
+    color: "#FF4000",
+    fontFamily: 'Abel'
+  }
+
+  const a = {
+    color: "#FF4000"
+  }
+
   return (
     <div>
       <div style={s}>
@@ -46,11 +56,16 @@ export default function Book() {
           <img style={img} src="/cybercover.png"></img>
 
           <div>
+            <p>{answer}</p>
+          </div>
+
+          <div>
             <textarea 
               rows = "5" 
               cols = "35" 
               value={text}
               onChange={handleChange}
+              style={textarea}
             ></textarea>
           </div>
 
@@ -58,9 +73,6 @@ export default function Book() {
           <button onClick={submit}>Ask</button>
           </div>
 
-          <div>
-            <p>{answer}</p>
-          </div>
         </div>
       </div>
     </div>
