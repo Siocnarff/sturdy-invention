@@ -20,9 +20,27 @@ export default function Book() {
       });
   }
 
+  function getGoodQuestion() {
+    setText("Thinking...");
+    fetch("/api/v1/document/ask_what_to_ask")
+      .then((response) => {
+        if (!response.ok) {
+          return "What can Ninjas teach us about Cyber Security?";
+        }
+        return response.json();
+     })
+     .then((data) => {
+      setText(data.question);
+    });
+  }
+
   function handleChange(event) {
     setText(event.target.value);
   }
+
+  const orange = "#FF4000"
+  const black = "#201E1F"
+  const blue = "#50B2C0"
 
   const s = {
     margin: "auto",
@@ -35,13 +53,23 @@ export default function Book() {
   }
 
   const textarea = {
-    backgroundColor: "#201E1F",
-    color: "#FF4000",
+    backgroundColor: black,
+    color: orange,
     fontFamily: 'Abel'
   }
 
   const a = {
-    color: "#FF4000"
+    color: orange
+  }
+
+  const button = {
+    backgroundColor: blue,
+    color: black,
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "4px",
+    cursor: "pointer",
+    marginTop: "10px",
   }
 
   return (
@@ -70,7 +98,11 @@ export default function Book() {
           </div>
 
           <div>
-          <button onClick={submit}>Ask</button>
+          <button onClick={submit} style={button}>Ask</button>
+          </div>
+
+          <div>
+          <button onClick={getGoodQuestion} style={{...button, backgroundColor: '#FAAA8D'}}>Ask Book For Question</button>
           </div>
 
         </div>

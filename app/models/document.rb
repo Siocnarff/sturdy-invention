@@ -38,29 +38,49 @@ class Document < ApplicationRecord
         pages.map do |row| row[0] end
     end
 
+    def get_answer_from_openai p
+        response = begin  @openai.completions(
+            parameters: {
+                model: COMPLETIONS_MODEL,
+                prompt: p,
+                max_tokens: 200,
+            })
+        end
+        answer = response['choices'].first['text'].strip
+end
+
     def ask_book query
         question = Question.find_by(q: query)
         if question
-            puts "Allready answered this question #{question.ask_count} times."
             question.update(:ask_count => question.ask_count + 1)
             return {:answer => question.a}
         end
         
         begin
             pages = find_relevant_pages(query)
-            p = "#{@shem}\n Context: #{pages.join('\n')}\n Query: #{query}"
-            response = begin  @openai.completions(
-                parameters: {
-                    model: COMPLETIONS_MODEL,
-                    prompt: p,
-                    max_tokens: 200,
-                })
-            end
-            answer = response['choices'].first['text'].strip
+            p = "#{@shem} \n\n Context: #{pages.join("\n\n")} \n\n Query: #{query}"
+            answer = get_answer_from_openai(p)
             Question.create(:q => query, :a => answer, :ask_count => 1)
             {:answer => answer}
         rescue
             {:answer => "Sorry, I am struggeling to answer that. Try again, and perhaps word it a bit differently?"}
         end
+    end
+
+    def get_relevant_question 
+        size = @db.query("select count(*) from pages").first.first
+        query = "I list some pages below. Please tell me what would be a good question to ask about a book that has these pages inside it.\n\n"
+
+        (1..2).each do |i|
+            page_number = rand(1..size).to_i
+            page = @db.query("select data from pages where rowid = ?", page_number).first.first
+            page = page.gsub("\n", " ").strip
+            query += "Page #{page_number}: #{page}\n\n"
+        end
+        
+        query += "\n\n"
+        query += "Question to ask:"
+
+        {:question => get_answer_from_openai(query)}
     end
 end

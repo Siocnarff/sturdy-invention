@@ -3,4 +3,9 @@ class Api::V1::DocumentController < ApplicationController
     answer = Document.new.ask_book(params[:query])
     render json: answer
   end
+  
+  def ask_what_to_ask
+    question = Document.new.get_relevant_question()
+    render json: question
+  end
 end
