@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  q: MyText
+  a: MyText
+  ask_count: 1
+
+two:
+  q: MyText
+  a: MyText
+  ask_count: 1
