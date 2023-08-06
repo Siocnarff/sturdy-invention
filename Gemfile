@@ -50,7 +50,7 @@ gem 'sqlite-vss', '~> 0.1.1'
 
 gem 'dotenv', '~> 2.8', '>= 2.8.1'
 
-gem 'pg'
+gem 'pg', '~> 1.5', '>= 1.5.3'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
