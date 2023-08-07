@@ -36,28 +36,24 @@ openai = OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
 
 query_embedding = get_embedding(q, openai).to_json
 
-# puts "Query embedding: #{query_embedding}"
-
-# db.execute('drop table vss_pages')
 db.execute(%{create virtual table if not exists vss_pages using vss0( e(4096) )})
-
 db.execute(%{delete from vss_pages})
 db.execute("insert into vss_pages (rowid, e) select rowid, e from pages")
 
-res = db.query(%{
-    with matches as (
+res = db.query(
+    "with matches as (
       select rowid, distance
       from vss_pages
       where vss_search(
         e, ?
       )
       order by distance asc
-      limit 3
+      limit 2
     )
     select
       pages.data, matches.distance
     from matches
-    left join pages on pages.rowid = matches.rowid}, query_embedding)
+    left join pages on pages.rowid = matches.rowid", query_embedding)
 
 
 answers = res.map do |row|
@@ -66,7 +62,6 @@ end
 
 
 context = answers.join("\n")
-
 
 p = "Summarize the below context data and also try to answer the given question.
 Context:
@@ -82,7 +77,7 @@ response = openai.completions(
     parameters: {
         model: COMPLETIONS_MODEL,
         prompt: p,
-        max_tokens: 100,
+        max_tokens: 400,
     })
 
 puts response['choices'].first['text'].strip

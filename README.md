@@ -1,6 +1,6 @@
 # Ask A Book
 
-## How to use the scripts to build your own embeddings for a pdf.
+## How to use the scripts to build your own embeddings for a pdf
 
 1. add OPENAI_API_KEY = 'yourkey' to an .env file in the scripts folder
 2. add the pdf you want to ask questions of in the scripts folder

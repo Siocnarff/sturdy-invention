@@ -43,6 +43,11 @@ clean_pages = reader.pages.map do |page|
     page.text.strip
 end
 
+clean_pages = clean_pages.filter do |page|
+    puts page.length
+    page.length > 300
+end
+
 puts "Got #{clean_pages.length} pages"
 
 openai = OpenAI::Client.new(access_token: ENV['OPENAI_API_KEY'])
