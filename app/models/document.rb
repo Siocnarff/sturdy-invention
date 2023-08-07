@@ -5,8 +5,8 @@ class Document < ApplicationRecord
 
     def initialize x
         @root = Rails.root.to_s
-        Dotenv.load("#{@root}/config/environments/.env")
-        @db = SQLite3::Database.new "#{@root}/scripts/cyberjutsu.pdf.db"
+        Dotenv.load("#{@root}/scripts/.env")
+        @db = SQLite3::Database.new "#{@root}/scripts/#{ENV['BOOK_DB_FILE']}"
         @db.enable_load_extension(true)
         SqliteVss.load(@db)
         @db.enable_load_extension(false)
@@ -74,7 +74,7 @@ end
         (1..2).each do |i|
             page_number = rand(1..size).to_i
             page = @db.query("select data from pages where rowid = ?", page_number).first.first
-            page = page.gsub("\n", " ").strip
+            page = page.strip
             query += "Page #{page_number}: #{page}\n\n"
         end
         

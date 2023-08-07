@@ -6,7 +6,7 @@ export default function Book() {
   const [text, setText] = useState("What can Ninjas teach us about Cyber Security?");
   const [answer, setAnswer] = useState(null);
 
-  function submit(event) {
+  function ask(event) {
     setAnswer("Thinking...");
     fetch("/api/v1/document/ask?" + new URLSearchParams({query: text}))
       .then((response) => {
@@ -114,7 +114,7 @@ export default function Book() {
           </div>
 
           <div>
-          <button onClick={submit} style={{...button, float: 'left'}}>Ask</button>
+          <button onClick={ask} style={{...button, float: 'left'}}>Ask</button>
           </div>
 
           <div>
@@ -122,11 +122,11 @@ export default function Book() {
           </div>
 
           <div>
-          <button onClick={getRandomPastQuestion} style={{...button, backgroundColor: '#6E7E85', float: 'left'}}>?</button>
+          <button onClick={getRandomPastQuestion} style={{...button, backgroundColor: '#6E7E85', float: 'left'}}>R</button>
           </div>
 
         </div>
-      </div>
+      </div>  
     </div>
   );
 }
