@@ -12,7 +12,7 @@ COMPLETIONS_MODEL = "text-davinci-003"
 MODEL_NAME = "curie"
 DOC_EMBEDDINGS_MODEL = "text-search-#{MODEL_NAME}-doc-001"
 
-if !File.file?(ARGV[0])
+if !File.file?("#{ARGV[0]}.db")
     abort "DB does not exist. Aborting."
 end
 
@@ -52,7 +52,7 @@ res = db.query(%{
         e, ?
       )
       order by distance asc
-      limit 6
+      limit 3
     )
     select
       pages.data, matches.distance
@@ -65,7 +65,7 @@ answers = res.map do |row|
 end
 
 
-context = answers.join("\n\n")
+context = answers.join("\n")
 
 
 p = "Summarize the below context data and also try to answer the given question.
@@ -74,8 +74,9 @@ Context:
 Question: #{q}"
 
 puts p
+puts "=================================\n"
 
-puts "\n\n Answer:\n"
+puts "\n Answer:"
 
 response = openai.completions(
     parameters: {
@@ -83,8 +84,6 @@ response = openai.completions(
         prompt: p,
         max_tokens: 100,
     })
-
-puts "=================================\n"
 
 puts response['choices'].first['text'].strip
 

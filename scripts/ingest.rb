@@ -40,7 +40,7 @@ rescue
 end
 
 clean_pages = reader.pages.map do |page|
-    page.text.gsub(/\n/, ' ').gsub(/\s+/, ' ').strip
+    page.text.strip
 end
 
 puts "Got #{clean_pages.length} pages"
